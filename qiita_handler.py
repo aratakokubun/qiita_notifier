@@ -1,4 +1,4 @@
-# coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 from qiita import *
 from datetime import datetime
@@ -30,8 +30,8 @@ class qiita_handler():
       if not self.config.has_section(self.target_section):
         self.config.add_section(self.target_section)
 
-      self.user_name    = self.str_to_datetime(self.config.get(self.target_section,     'user_name'))
-      self.user_pass    = self.str_to_datetime(self.config.get(self.target_section,     'user_pass'))
+      self.user_name    = self.config.get(self.target_section, 'user_name')
+      self.user_pass    = self.config.get(self.target_section, 'user_pass')
     except:
       print "Could not read config file : %s" % self.config_file
 
@@ -57,6 +57,10 @@ class qiita_handler():
     client = Users()
     self.user_items = client.user_items(url_name=self.user_name, params={'page':page, 'per_page':nums})
     self.update = datetime.now()
+
+  def get_latest_post(self):
+      self.update_posts(nums=1)
+      return self.user_items[0]
 
   def get_latest_post_time(self):
     self.update_posts(nums=1)

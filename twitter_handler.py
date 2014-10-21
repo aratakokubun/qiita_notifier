@@ -5,9 +5,9 @@ import random
 import sys
 import ConfigParser
 
-class twiiter_handler():
-  config_file = 'qiita.cfg' # TODO
-  target_section = 'twitter' # TODO
+class twitter_handler():
+  config_file = 'twitter.cfg'
+  target_section = 'twitter'
 
   default_config = {
     'since_id': '1',
@@ -18,12 +18,12 @@ class twiiter_handler():
   }
 
   def __init__(self):
-    self.setconfig()
+    self.set_config()
     self.do_oauth()
 
   def set_config(self):
     try:
-      self.config = ConfigParser.SafeCOnfigParser(self.default_config)
+      self.config = ConfigParser.SafeConfigParser(self.default_config)
       self.config.read(self.config_file)
       if not self.config.has_section(self.target_section):
         self.config.add_section(self.target_section)
@@ -35,23 +35,22 @@ class twiiter_handler():
       self.access_key = self.config.get(self.target_section, 'access_key')
       self.access_secret = self.config.get(self.target_section, 'access_secret')
     except:
-  print "Could not read config file : %s" % (self.config_file)
+      print "Could not read config file : %s" % (self.config_file)
 
-  # oauth認証を行う
+  # Do twitter outhentification
   def do_oauth(self):
     # create ouath handler
     self.auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret);
     # set access token to oauth handler
     self.auth.set_access_token(self.access_key, self.access_secret);
-        # create api
-        self.api = tweepy.API(auth_handler = self.auth);
+    # create api
+    self.api = tweepy.API(auth_handler = self.auth);
 
 
   def post(self, str):
-    api.update_status(str)
-    print "post msg = : %s" % (str)
+    api.update_status(str.decode('utf-8').strip())
 
-  # configファイルのsince_idを更新
+  # Update since_id in config file
   def update_config(self):
     try:
       self.config.set(self.target_section, 'since_id', str(self.since_id))
@@ -60,7 +59,7 @@ class twiiter_handler():
       print "Error: Could not write to config: %s", (self.default_config_file)
       sys.exit(1)
 
-  # リストをツイート
+  # Tweet all items in list
   def tweet_posts(self, posts):
     for post in posts:
       length = len(post)

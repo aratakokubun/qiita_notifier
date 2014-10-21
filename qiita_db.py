@@ -3,7 +3,7 @@
 import sqlite3 as sqlite
 import re
 
-class mp3_db:
+class qiita_db:
 
     def __init__(self, db_name):
         self.con = sqlite.connect(db_name)
