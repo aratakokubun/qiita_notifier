@@ -18,7 +18,7 @@ class qiita_notifier():
     'update_year': 'null',
   }
 
-  urge_post_msg = 'You did not upload any post to qiita %s. You should do something today!'
+  urge_post_msg = 'You did not upload any post to qiita %s. You should do some action tomorrow!'
   complete_post_msg = 'You have uploaded "%s" %s. Keep going on!'
 
   def __init__(self):
@@ -42,21 +42,16 @@ class qiita_notifier():
       print "Could not read config file : %s" % self.config_file
 
   # -------------------------------------------------------------------------
-  # Notify activity methods
-  def post_today_action_to_twitter(self):
-    self.qih.get_today_post_items()
-    pass
-
   def check_qiita_action(self):
     latest_post = self.qih.get_latest_post()
     latest_time = self.str_to_datetime(latest_post['created_at'][:-6])
     date_diff = datetime.now() - latest_time
     if date_diff.days > 6:
-        self.twh.post(urge_post_msg % ('in this week'))
+        self.twh.post(self.urge_post_msg % ('in this week'))
     elif date_diff.days > 0:
-        self.twh.post(urge_post_msg % ('today'))
+        self.twh.post(self.urge_post_msg % ('today'))
     else:
-        self.twh.post(complete_post_msg % (latest_post['title'], 'today'))
+        self.twh.post(self.complete_post_msg % (latest_post['title'], 'today'))
 
 # -------------------------------------------------------------------------
   def str_to_datetime(self, time_str):

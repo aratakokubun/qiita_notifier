@@ -7,7 +7,9 @@ import ConfigParser
 
 class twitter_handler():
   config_file = 'twitter.cfg'
-  target_section = 'twitter'
+  debug = False
+  target_test = 'otenki'
+  target_section = 'kokushingo'
 
   default_config = {
     'since_id': '1',
@@ -18,6 +20,7 @@ class twitter_handler():
   }
 
   def __init__(self):
+    self.target = self.target_test if self.debug else self.target_section
     self.set_config()
     self.do_oauth()
 
@@ -25,15 +28,15 @@ class twitter_handler():
     try:
       self.config = ConfigParser.SafeConfigParser(self.default_config)
       self.config.read(self.config_file)
-      if not self.config.has_section(self.target_section):
-        self.config.add_section(self.target_section)
+      if not self.config.has_section(self.target):
+        self.config.add_section(self.target)
 
       # read data from config file
-      self.since_id = self.config.getint(self.target_section, 'since_id')
-      self.consumer_key = self.config.get(self.target_section, 'consumer_key')
-      self.consumer_secret = self.config.get(self.target_section, 'consumer_secret')
-      self.access_key = self.config.get(self.target_section, 'access_key')
-      self.access_secret = self.config.get(self.target_section, 'access_secret')
+      self.since_id = self.config.getint(self.target, 'since_id')
+      self.consumer_key = self.config.get(self.target, 'consumer_key')
+      self.consumer_secret = self.config.get(self.target, 'consumer_secret')
+      self.access_key = self.config.get(self.target, 'access_key')
+      self.access_secret = self.config.get(self.target, 'access_secret')
     except:
       print "Could not read config file : %s" % (self.config_file)
 
@@ -48,7 +51,7 @@ class twitter_handler():
 
 
   def post(self, str):
-    api.update_status(str.decode('utf-8').strip())
+    self.api.update_status(str.decode('utf-8').strip())
 
   # Update since_id in config file
   def update_config(self):
