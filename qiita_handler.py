@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from qiita import *
-from datetime import datetime
+from datetime import datetime, timedelta
 import ConfigParser
 import pytz
 
@@ -58,14 +58,14 @@ class qiita_handler():
     self.user_items = client.user_items(url_name=self.user_name, params={'page':page, 'per_page':nums})
     self.update = datetime.now()
 
-  def get_items_from(self, since_dt, nums):
+  def get_items_from(self, since_dt, nums=100):
     all_items = []
     oldest_dt = datetime.now()
     page = 1
     while oldest_dt > since_dt:
-      self.update_post(page=page, nums=nums)
+      self.update_posts(page=page, nums=nums)
       all_items += self.user_items
-      oldest_dt = self.str_to_datetime(self.user_items[nums-1]['created_at'])
+      oldest_dt = self.str_to_datetime(self.user_items[-1]['created_at'])
       page += 1
     return all_items
 
@@ -82,8 +82,9 @@ class qiita_handler():
     return [item for item in self.user_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 1]
 
   def get_weekly_post_items(self):
-    self.update_posts()
-    return [item for item in self.user_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 8]
+    weekly_items = self.get_items_from(datetime.now()-timedelta(1))
+    # return [item for item in weekly_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 8]
+    return {self.str_to_datetime(item['created_at']):item for item in weekly_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 8}
 
   def str_to_datetime(self, time_str):
     # qiita created_at format 2000-01-01 00:00:00 +0900

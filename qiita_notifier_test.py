@@ -3,5 +3,6 @@
 from qiita_notifier import qiita_notifier
 
 if __name__ == "__main__":
-    qi = qiita_notifier()
-    qi.check_qiita_action()
+    qin = qiita_notifier()
+    qin.check_qiita_action()
+    qin.post_weekly_statics()

@@ -1,21 +1,28 @@
 # -*- coding:utf-8 -*-
 import datetime
 import matplotlib.pyplot as plt
-import matplotlib.date as mdt
+import matplotlib.dates as mdt
+import enum
 
 class statics_plot():
 
-  def __init__(self):
-    pass
+  Type = enum.Enum('Type', 'line plot bar');
 
-  def __del__(self):
-    pass
   # Format of item in items is dictionary, key:date value:data
-  def generate_static_image(self, items, since, latest, days=1):
-    x_label, statics = generate_sum(items, since, latest, days=days)
+  @classmethod
+  def generate_statics_image(cls, items, since, latest, days=1, type=Type.line, folder='images/', color='r'):
+    x_label, statics = cls.generate_sum(items, since, latest, days=days)
     fig = plt.figure()
     graph = fig.add_subplot(111)
-    graph.plot(x_label, statics)
+    # plot type
+    if type==cls.Type.line:
+        graph.plot(x_label, list(statics.values()), color=color)
+    elif type==cls.Type.plot:
+        graph.plot(x_label, list(statics.values()), 'o', color=color)
+    elif type==cls.Type.bar:
+        graph.bar(x_label, list(statics.values()), color=color, edgecolor='k')
+    else:
+        print("Error: "+type+" does not match any of Type enum.")
 
     # graph format for days
     days = mdt.DayLocator() # every day
@@ -25,16 +32,17 @@ class statics_plot():
     fig.autofmt_xdate()
 
     # Generate graph image file
-    now = datetime.now().date()
-    file_path = 'images/'+now+'.png'
+    now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    file_path = folder+now+'.png'
     plt.savefig(file_path)
 
     return file_path
 
-  def generate_sum(self, items, since, latest, days=1):
-    x_label = generate_date_label(since, latest, days=days)
-    # return x_label, {x_label[i]:len([k for k,v in items.iteritems() if x_label[i] < k && k < x_label[i-1]]) for i in range(len(x_label)-1, 0, -1)}
-    return x_label, x_label
+  @classmethod
+  def generate_sum(cls, items, since, latest, days=1):
+    x_label = cls.generate_date_label(since, latest, days=days)
+    return list(reversed(x_label[1:])), {x_label[i]:len([k for k,v in items.items() if x_label[i] < k and k < x_label[i-1]]) for i in range(len(x_label)-1, 0, -1)}
 
-  def generate_date_label(self, since, latest, days=1):
-    return [latest - datetime.timedelta(days=x) for x in range(-1, (latest-since).days, days)]
+  @classmethod
+  def generate_date_label(cls, since, latest, days=1):
+    return [latest - datetime.timedelta(days=x) for x in range(0, (latest-since).days, days)]

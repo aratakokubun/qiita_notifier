@@ -55,7 +55,8 @@ class twitter_handler():
 
   # post single item with media
   def post_with_media(self, status, file):
-    self.api.status_update_with_media(file, status=status)
+    # self.api.status_update_with_media(file, status=status)
+    self.api.update_with_media(file, status=status)
 
   # Update since_id in config file
   def update_config(self):
