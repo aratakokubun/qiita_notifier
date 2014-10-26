@@ -7,7 +7,7 @@ import ConfigParser
 
 class twitter_handler():
   config_file = 'twitter.cfg'
-  debug = False
+  debug = True
   target_test = 'otenki'
   target_section = 'kokushingo'
 
@@ -49,9 +49,13 @@ class twitter_handler():
     # create api
     self.api = tweepy.API(auth_handler = self.auth);
 
-
+  # post single item
   def post(self, str):
     self.api.update_status(str.decode('utf-8').strip())
+
+  # post single item with media
+  def post_with_media(self, status, file):
+    self.api.status_update_with_media(file, status=status)
 
   # Update since_id in config file
   def update_config(self):

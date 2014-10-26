@@ -58,6 +58,17 @@ class qiita_handler():
     self.user_items = client.user_items(url_name=self.user_name, params={'page':page, 'per_page':nums})
     self.update = datetime.now()
 
+  def get_items_from(self, since_dt, nums):
+    all_items = []
+    oldest_dt = datetime.now()
+    page = 1
+    while oldest_dt > since_dt:
+      self.update_post(page=page, nums=nums)
+      all_items += self.user_items
+      oldest_dt = self.str_to_datetime(self.user_items[nums-1]['created_at'])
+      page += 1
+    return all_items
+
   def get_latest_post(self):
       self.update_posts(nums=1)
       return self.user_items[0]

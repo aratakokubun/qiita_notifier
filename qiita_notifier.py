@@ -53,7 +53,10 @@ class qiita_notifier():
     else:
         self.twh.post(self.complete_post_msg % (latest_post['title'], 'today'))
 
-# -------------------------------------------------------------------------
+  def qiita_statics(self):
+
+
+  # -------------------------------------------------------------------------
   def str_to_datetime(self, time_str):
     # qiita created_at format 2000-01-01 00:00:00 +0900
     return datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
