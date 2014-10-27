@@ -7,7 +7,7 @@ import ConfigParser
 
 class twitter_handler():
   config_file = 'twitter.cfg'
-  debug = True
+  debug = False
   target_test = 'otenki'
   target_section = 'kokushingo'
 
