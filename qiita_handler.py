@@ -64,6 +64,8 @@ class qiita_handler():
     page = 1
     while oldest_dt > since_dt:
       self.update_posts(page=page, nums=nums)
+      if len(self.user_items) == 0:
+          break
       all_items += self.user_items
       oldest_dt = self.str_to_datetime(self.user_items[-1]['created_at'])
       page += 1
@@ -82,9 +84,17 @@ class qiita_handler():
     return [item for item in self.user_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 1]
 
   def get_weekly_post_items(self):
-    weekly_items = self.get_items_from(datetime.now()-timedelta(1))
+    weekly_items = self.get_items_from(datetime.now()-timedelta(8))
     # return [item for item in weekly_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 8]
     return {self.str_to_datetime(item['created_at']):item for item in weekly_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 8}
+
+  def get_monthly_post_items(self):
+    monthly_items = self.get_items_from(datetime.now()-timedelta(31))
+    return {self.str_to_datetime(item['created_at']):item for item in monthly_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 31}
+
+  def get_yearly_post_items(self):
+    yearly_items = self.get_items_from(datetime.now()-timedelta(365))
+    return {self.str_to_datetime(item['created_at']):item for item in yearly_items if (datetime.now() - self.str_to_datetime(item['created_at'])).days < 365}
 
   def str_to_datetime(self, time_str):
     # qiita created_at format 2000-01-01 00:00:00 +0900
