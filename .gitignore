@@ -2,3 +2,7 @@
 *.cfg
 *.pyc
 *.db
+*.jpg
+*.jpeg
+*.png
+images/*
