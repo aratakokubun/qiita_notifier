@@ -53,6 +53,9 @@ class twitter_handler():
   def post(self, str):
     self.api.update_status(str.decode('utf-8').strip())
 
+  def post_to_myself(self, str):
+    self.api.update_status('@'+self.api.me().screen_name + ' ' + str.decode('utf-8').strip())
+
   # post single item with media
   def post_with_media(self, status, file):
     # self.api.status_update_with_media(file, status=status)
