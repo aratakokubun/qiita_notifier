@@ -19,6 +19,7 @@ class qiita_notifier():
     'update_year': 'null',
   }
 
+  auto_msg = '[Auto] '
   urge_post_msg = 'You did not upload any post to qiita %s. You should do some action tomorrow!'
   complete_post_msg = 'You have uploaded "%s" %s. Keep going on!'
   static_msg = 'Your action in %s'
@@ -55,11 +56,19 @@ class qiita_notifier():
     latest_time = self.str_to_datetime(latest_post['created_at'][:-6])
     date_diff = datetime.now() - latest_time
     if date_diff.days > 6:
+<<<<<<< HEAD
         self.twh.post(self.urge_post_msg % ('in this week'))
     elif date_diff.days > 0:
         self.twh.post(self.urge_post_msg % ('today'))
     else:
         self.twh.post(self.complete_post_msg % (latest_post['title'], 'today'))
+=======
+        self.twh.post_to_myself(self.urge_post_msg % ('in this week'))
+    elif date_diff.days > 0:
+        self.twh.post_to_myself(self.urge_post_msg % ('today'))
+    else:
+        self.twh.post_to_myself(self.complete_post_msg % (latest_post['title'], 'today'))
+>>>>>>> origin/development
     # update config update_day
     self.config.set(self.target_section, 'update_day', self.datetime_to_str(now))
     self.config.write(open(self.config_file, 'w'))
@@ -79,7 +88,11 @@ class qiita_notifier():
     # file = stp.generate_statics_image(weekly_items, since, now, type=stp.Type.bar, folder='images/week-')
     # self.twh.post_with_media(self.static_msg % ('this week'), file)
     file = self.stp.generate_statics_plotly(weekly_items, since, now, file='weekly_statics')
+<<<<<<< HEAD
     self.twh.post(self.static_msg % ('this week') + '\n' + file)
+=======
+    self.twh.post_to_myself(self.static_msg % ('this week') + '\n' + file)
+>>>>>>> origin/development
     # update config update_day
     self.config.set(self.target_section, 'update_week', self.datetime_to_str(now))
     self.config.write(open(self.config_file, 'w'))
@@ -99,7 +112,11 @@ class qiita_notifier():
     # file = stp.generate_statics_image(monthly_items, since, now, days=3, type=stp.Type.bar, folder='images/month-')
     # self.twh.post_with_media(self.static_msg % ('this month'), file)
     file = self.stp.generate_statics_plotly(monthly_items, since, now, days=3, file='monthly_statics')
+<<<<<<< HEAD
     self.twh.post(self.static_msg % ('this month') + '\n' + file)
+=======
+    self.twh.post_to_myself(self.static_msg % ('this month') + '\n' + file)
+>>>>>>> origin/development
     # update config update_day
     self.config.set(self.target_section, 'update_month', self.datetime_to_str(now))
     self.config.write(open(self.config_file, 'w'))
@@ -119,7 +136,11 @@ class qiita_notifier():
     # file = stp.generate_statics_image(yearly_items, since, now, days=30, type=stp.Type.bar, folder='images/year-')
     # self.twh.post_with_media(self.static_msg % ('this year'), file)
     file = self.stp.generate_statics_plotly(yearly_items, since, now, days=30, file='yearly_statics')
+<<<<<<< HEAD
     self.twh.post(self.static_msg % ('this year') + '\n' + file)
+=======
+    self.twh.post_to_myself(self.static_msg % ('this year') + '\n' + file)
+>>>>>>> origin/development
     # update config update_day
     self.config.set(self.target_section, 'update_year', self.datetime_to_str(now))
     self.config.write(open(self.config_file, 'w'))
