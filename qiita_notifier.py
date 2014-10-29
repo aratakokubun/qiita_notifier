@@ -59,7 +59,7 @@ class qiita_notifier():
     if date_diff.days > 0:
         post_msg = self.urge_post_msg % ('in %d days!' % (date_diff.days))
     else:
-    post_msg = self.complete_post_msg % (latest_post['title'], 'today')
+        post_msg = self.complete_post_msg % (latest_post['title'], 'today')
     self.twh.post_to_myself(post_msg)
     print('tweet msg:%s' % post_msg)
     # update config update_day
