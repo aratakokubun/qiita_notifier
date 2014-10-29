@@ -50,19 +50,19 @@ class qiita_notifier():
     now = datetime.now()
 
     if (now-self.update_day).days < 1:
-				print("Not a day has passed since last update.")
-				return
+        print("Not a day has passed since last update.")
+        return
 
     latest_post = self.qih.get_latest_post()
     latest_time = self.str_to_datetime(latest_post['created_at'][:-6])
     date_diff = datetime.now() - latest_time
-		if date_diff.days > 0:
-				post_msg = self.urge_post_msg % ('in %d days!' % (date_diff.days))
-		else:
-				post_msg = self.complete_post_msg % (latest_post['title'], 'today')
-		self.twh.post_to_myself(post_msg)
+    if date_diff.days > 0:
+        post_msg = self.urge_post_msg % ('in %d days!' % (date_diff.days))
+    else:
+    post_msg = self.complete_post_msg % (latest_post['title'], 'today')
+    self.twh.post_to_myself(post_msg)
     print('tweet msg:%s' % post_msg)
-		# update config update_day
+    # update config update_day
     self.config.set(self.target_section, 'update_day', self.datetime_to_str(now))
     self.config.write(open(self.config_file, 'w'))
 
