@@ -21,7 +21,7 @@ class qiita_notifier():
 
   auto_msg = '[Auto] '
   urge_post_msg = 'You did not upload any post to qiita %s. You should do some action tomorrow!'
-  complete_post_msg = 'You have uploaded "%s" %s. Keep going on!'
+  complete_post_msg = 'You have uploaded "%s"(%s) %s. Keep going on!'
   static_msg = 'Your action in %s'
 
   def __init__(self):
@@ -49,7 +49,7 @@ class qiita_notifier():
   def check_qiita_action(self):
     now = datetime.now()
 
-    if (now-self.update_day).days < 1:
+    if (now-self.update_day).seconds/3600 + (now-self.update_day).days*24 < 23:
         print("Not a day has passed since last update.")
         return
 
@@ -59,7 +59,7 @@ class qiita_notifier():
     if date_diff.days > 0:
         post_msg = self.urge_post_msg % ('in %d days!' % (date_diff.days))
     else:
-        post_msg = self.complete_post_msg % (latest_post['title'], 'today')
+        post_msg = self.complete_post_msg % (latest_post['title'], latest_post['url'], 'today')
     self.twh.post_to_myself(post_msg)
     print('tweet msg:%s' % post_msg)
     # update config update_day
