@@ -22,7 +22,7 @@ class qiita_notifier():
   auto_msg = '[Auto] '
   urge_post_msg = 'You did not upload any post to qiita %s. You should do some action tomorrow!'
   complete_post_msg = 'You have uploaded "%s"(%s) %s. Keep going on!'
-  static_msg = 'Your action in %s'
+  static_msg = 'Your action of Qiita in %s'
 
   def __init__(self):
     self.set_config()
